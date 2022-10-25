@@ -3,11 +3,13 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
     customerId: {
-        type: Number,
+        type: Schema.Types.ObjectId,
+        ref: 'customers',
         required: true
     },
     productId: {
-        type: Number,
+        type: Schema.Types.ObjectId,
+        ref: 'products',
         required: true
     },
     quantity: {
@@ -16,6 +18,7 @@ const OrderSchema = new Schema({
     },
     purchaseDate: {
         type: Date,
+        default: Date.now,
         required: true
     },
 });

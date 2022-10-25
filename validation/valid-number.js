@@ -1,5 +1,5 @@
 const validNumber = num => {
-    return typeof num === 'number';
+    return typeof parseFloat(num) === 'number';
 }
 
 

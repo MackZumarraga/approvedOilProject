@@ -1,6 +1,7 @@
 const Validator = require("validator");
 const validText = require("./valid-text");
 const validNumber = require("./valid-number");
+const types = require("./product-types");
 
 module.exports = function validateNewProductInput(data) {
     let errors = {};
@@ -14,16 +15,20 @@ module.exports = function validateNewProductInput(data) {
         errors.name = "Name is required";
     }
 
-    if (Validator.isEmpty(data.type)) {
-        errors.type = "Type is required";
+    if (!Validator.isIn(data.type, Object.keys(types))) {
+        errors.type = "Type is not valid";
     }
 
-    if (!Validator.isNumeric(data.price)) {
+    if (!Validator.isFloat(data.price, {min: 0.00})) {
         errors.price = "Price is invalid";
     }
 
     if (Validator.isEmpty(data.expiration)) {
         errors.expiration = "Expiration date is required";
+    }
+
+    if (!Validator.isDate(data.expiration)) {
+        errors.expiration = "Expiration date is invalid";
     }
 
     return {
