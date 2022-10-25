@@ -3,9 +3,21 @@ const router = express.Router();
 const Customer = require("../../models/Customer");
 const validateNewCustomerInput = require("../../validation/newCustomer");
 
-router.get("/test", (req, res) => {
-    res.json({ msg: "this is the customers route"});
+router.get("/", (req, res) => {
+    Customer
+    .find()
+    .sort({ name: 1 })
+    .then(customers => res.json(customers))
+    .catch(err => res.status(400).json(err));
 });
+
+router.get("/:id", (req, res) => {
+    Customer
+    .findById(req.params.id)
+    .then(customer => res.json(customer))
+    .catch(err => res.status(400).json(err));
+});
+
 
 router.post("/newCustomer", (req, res) => {
     const { errors, isValid } = validateNewCustomerInput(req.body);
