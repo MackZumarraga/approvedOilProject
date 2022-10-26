@@ -46,7 +46,6 @@ router.post("/newCustomer", (req, res) => {
 
 
 router.patch("/updateCustomer/:customer_id", (req, res) => {
-    //validation for the update object needs to happen first
     const { errors, isValid } = validateUpdateCustomerInput(req.body);
 
     if (!isValid) {

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Product = require("../../models/Product");
 const validateNewProductInput = require("../../validation/newProduct");
+const validateUpdateProductInput = require("../../validation/updateProduct");
 
 router.get("/", (req, res) => {
     Product
@@ -38,6 +39,25 @@ router.post("/newProduct", (req, res) => {
             })
 
             newProduct.save().then(product => res.send(product)).catch(err => res.send(err));
+        }
+    });
+});
+
+
+router.patch("/updateProduct/:product_id", (req, res) => {
+    const { errors, isValid } = validateUpdateProductInput(req.body);
+
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    const update = req.body
+    
+    Product.findByIdAndUpdate(req.params.product_id, update, { new: true }, function(error, updatedProduct) {
+        if (error) {
+            return res.status(400).json(error);
+        } else {
+            return res.json(updatedProduct);
         }
     });
 });
