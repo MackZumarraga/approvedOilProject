@@ -43,11 +43,11 @@ router.post("/newOrder", (req, res) => {
         return res.status(400).json(errors);
     }
 
-    Customer.findById(req.body.customerId, (error, data) => {
+    Customer.findById(req.body.customerId, (error, customer) => {
         if (error) {
             return res.status(400).json( {customer: "This customer does not exist"} );
         } else {
-            Product.findById(req.body.productId, (error, data) => {
+            Product.findById(req.body.productId, (error, product) => {
                 if (error) {
                     return res.status(400).json( {customer: "This product does not exist"} );
                 } else {

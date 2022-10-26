@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Customer = require("../../models/Customer");
 const validateNewCustomerInput = require("../../validation/newCustomer");
+const validateUpdateCustomerInput = require("../../validation/updateCustomer");
 
 router.get("/", (req, res) => {
     Customer
@@ -42,5 +43,25 @@ router.post("/newCustomer", (req, res) => {
         }
     })
 })
+
+
+router.patch("/updateCustomer/:customer_id", (req, res) => {
+    //validation for the update object needs to happen first
+    const { errors, isValid } = validateUpdateCustomerInput(req.body);
+
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    const update = req.body
+    
+    Customer.findByIdAndUpdate(req.params.customer_id, update, { new: true }, function(error, updatedCustomer) {
+        if (error) {
+            return res.status(400).json(error);
+        } else {
+            return res.json(updatedCustomer);
+        }
+    });
+});
 
 module.exports = router;
