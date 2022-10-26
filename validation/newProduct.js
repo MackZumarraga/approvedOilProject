@@ -28,8 +28,9 @@ module.exports = function validateNewProductInput(data) {
     }
 
     if (!Validator.isDate(data.expiration)) {
-        errors.expiration = "Expiration date is invalid";
+        errors.expiration = "Expiration date should be formatted as YYYY-MM-DD or YYYY/MM/DD";
     }
+
 
     return {
         errors,

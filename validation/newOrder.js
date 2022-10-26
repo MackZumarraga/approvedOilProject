@@ -18,7 +18,6 @@ module.exports = function validateNewOrderInput(data) {
         errors.productId = "ProductId is required";
     }
 
-
     if (!Validator.isInt(data.quantity, {min: 0})) {
         errors.quantity = "Quantity is invalid";
     }
