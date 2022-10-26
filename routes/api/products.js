@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../../models/Product");
+const Order = require("../../models/Order");
 const validateNewProductInput = require("../../validation/newProduct");
 const validateUpdateProductInput = require("../../validation/updateProduct");
+const ObjectId = require('mongodb').ObjectId;
 
 router.get("/", (req, res) => {
     Product
@@ -58,6 +60,26 @@ router.patch("/updateProduct/:product_id", (req, res) => {
             return res.status(400).json(error);
         } else {
             return res.json(updatedProduct);
+        }
+    });
+});
+
+
+router.delete("/deleteProduct/:product_id", (req, res) => {
+    Product.findByIdAndDelete(req.params.product_id, function(error, deletedProduct) {
+        if (error || deletedProduct === null) {
+            return res.status(400).json({ error: "This product does not exist" });
+        } else {
+            const deletedInstance = { "productId" : ObjectId(req.params.product_id) }
+
+            Order.deleteMany(deletedInstance, function(error, deletedOrders) {
+                if (error || deletedOrders === null) {
+                    return res.status(400).json({ error: "There are no orders for this product" });
+                } 
+                else {
+                    return res.json({ deletedOrdersCount: deletedOrders.deletedCount, deletedProduct: deletedProduct });
+                }
+            });
         }
     });
 });

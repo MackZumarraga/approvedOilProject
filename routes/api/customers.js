@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Customer = require("../../models/Customer");
+const Order = require("../../models/Order");
 const validateNewCustomerInput = require("../../validation/newCustomer");
 const validateUpdateCustomerInput = require("../../validation/updateCustomer");
+const ObjectId = require('mongodb').ObjectId;
 
 router.get("/", (req, res) => {
     Customer
@@ -30,7 +32,7 @@ router.post("/newCustomer", (req, res) => {
     Customer.findOne({ email: req.body.email })
     .then(customer => {
         if (customer) {
-            return res.status(400).json( {email: "This email already exists"})
+            return res.status(400).json({ email: "This email already exists" })
         } else {
             const newCustomer = new Customer({
                 email: req.body.email,
@@ -59,6 +61,26 @@ router.patch("/updateCustomer/:customer_id", (req, res) => {
             return res.status(400).json(error);
         } else {
             return res.json(updatedCustomer);
+        }
+    });
+});
+
+
+router.delete("/deleteCustomer/:customer_id", (req, res) => {
+    Customer.findByIdAndDelete(req.params.customer_id, function(error, deletedCustomer) {
+        if (error || deletedCustomer === null) {
+            return res.status(400).json({ error: "This customer does not exist" });
+        } else {
+            const deletedInstance = { "customerId" : ObjectId(req.params.customer_id) }
+
+            Order.deleteMany(deletedInstance, function(error, deletedOrders) {
+                if (error || deletedOrders === null) {
+                    return res.status(400).json({ error: "There are no orders for this customer" });
+                } 
+                else {
+                    return res.json({ deletedOrdersCount: deletedOrders.deletedCount, deletedCustomer: deletedCustomer });
+                }
+            });
         }
     });
 });
