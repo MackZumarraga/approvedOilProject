@@ -9,7 +9,6 @@ const bodyParser = require("body-parser");
 
 mongoose
     .connect(db, { useNewUrlParser: true })
-    .catch(err => console.log(err));
 
 app.use(bodyParser.urlencoded({
     extended: false
