@@ -6,14 +6,16 @@ const validateNewProductInput = require("../../validation/newProduct");
 const validateUpdateProductInput = require("../../validation/updateProduct");
 const ObjectId = require('mongodb').ObjectId;
 
+//Retrieves all product
 router.get("/", (req, res) => {
     Product
     .find()
-    .sort({ name: 1 })
+    .sort({ expiration: 1 }) //Product's expiration date
     .then(products => res.json(products))
     .catch(err => res.status(400).json(err));
 });
 
+//Retrieves a product via product ID
 router.get("/:id", (req, res) => {
     Product
     .findById(req.params.id)
@@ -21,6 +23,7 @@ router.get("/:id", (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+//Adds a new product
 router.post("/newProduct", (req, res) => {
     const { errors, isValid } = validateNewProductInput(req.body);
 
@@ -28,7 +31,7 @@ router.post("/newProduct", (req, res) => {
         return res.status(400).json(errors);
     }
 
-    Product.findOne({ name: req.body.name })
+    Product.findOne({ name: req.body.name }) //Avoids adding a duplicate
     .then(product => {
         if (product) {
             return res.status(400).json( {product: "This product already exists"});
@@ -45,7 +48,7 @@ router.post("/newProduct", (req, res) => {
     });
 });
 
-
+//Updates a product information
 router.patch("/updateProduct/:product_id", (req, res) => {
     const { errors, isValid } = validateUpdateProductInput(req.body);
 
@@ -64,7 +67,7 @@ router.patch("/updateProduct/:product_id", (req, res) => {
     });
 });
 
-
+//Deletes a product
 router.delete("/deleteProduct/:product_id", (req, res) => {
     Product.findByIdAndDelete(req.params.product_id, function(error, deletedProduct) {
         if (error || deletedProduct === null) {

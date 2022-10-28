@@ -6,6 +6,7 @@ const validateNewCustomerInput = require("../../validation/newCustomer");
 const validateUpdateCustomerInput = require("../../validation/updateCustomer");
 const ObjectId = require('mongodb').ObjectId;
 
+//Retrieves all customers
 router.get("/", (req, res) => {
     Customer
     .find()
@@ -14,6 +15,7 @@ router.get("/", (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+//Retrieves a customer via customer ID
 router.get("/:id", (req, res) => {
     Customer
     .findById(req.params.id)
@@ -21,7 +23,7 @@ router.get("/:id", (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-
+//Adds a new customer
 router.post("/newCustomer", (req, res) => {
     const { errors, isValid } = validateNewCustomerInput(req.body);
 
@@ -29,7 +31,7 @@ router.post("/newCustomer", (req, res) => {
         return res.status(400).json(errors);
     }
 
-    Customer.findOne({ email: req.body.email })
+    Customer.findOne({ email: req.body.email }) //Avoids adding a duplicate
     .then(customer => {
         if (customer) {
             return res.status(400).json({ email: "This email already exists" })
@@ -46,7 +48,7 @@ router.post("/newCustomer", (req, res) => {
     })
 })
 
-
+//Updates a customer information
 router.patch("/updateCustomer/:customer_id", (req, res) => {
     const { errors, isValid } = validateUpdateCustomerInput(req.body);
 
@@ -65,7 +67,7 @@ router.patch("/updateCustomer/:customer_id", (req, res) => {
     });
 });
 
-
+//Deletes a customer
 router.delete("/deleteCustomer/:customer_id", (req, res) => {
     Customer.findByIdAndDelete(req.params.customer_id, function(error, deletedCustomer) {
         if (error || deletedCustomer === null) {

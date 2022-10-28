@@ -6,6 +6,7 @@ const Order = require("../../models/Order");
 const validateNewOrderInput = require("../../validation/newOrder");
 const validateUpdateOrderInput = require("../../validation/updateOrder");
 
+//Retrieves all orders
 router.get("/", (req, res) => {
     Order
     .find()
@@ -14,6 +15,7 @@ router.get("/", (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+//Retrieves an order via customer ID
 router.get("/customer/:customer_id", (req, res) => {
     Order
     .find({ customerId: req.params.customer_id })
@@ -22,6 +24,7 @@ router.get("/customer/:customer_id", (req, res) => {
     .catch(err => res.status(400).json(err));
 })
 
+//Retrieves an order via product ID
 router.get("/product/:product_id", (req, res) => {
     Order
     .find({ productId: req.params.product_id })
@@ -30,6 +33,7 @@ router.get("/product/:product_id", (req, res) => {
     .catch(err => res.status(400).json(err));
 })
 
+//Retrieves an order via order ID
 router.get("/:id", (req, res) => {
     Order
     .findById(req.params.id)
@@ -37,7 +41,7 @@ router.get("/:id", (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-
+//Adds a new order
 router.post("/newOrder", (req, res) => {
     const { errors, isValid } = validateNewOrderInput(req.body);
 
@@ -45,6 +49,7 @@ router.post("/newOrder", (req, res) => {
         return res.status(400).json(errors);
     }
 
+    //Checks if customer ID and product ID are valid
     Customer.findById(req.body.customerId, (error, customer) => {
         if (error || customer === null) {
             return res.status(400).json( {customer: "This customer does not exist"} );
@@ -67,7 +72,7 @@ router.post("/newOrder", (req, res) => {
     });
 });
 
-
+//Updates an order information
 router.patch("/updateOrder/:order_id", (req, res) => {
     const { errors, isValid } = validateUpdateOrderInput(req.body);
 
@@ -77,6 +82,7 @@ router.patch("/updateOrder/:order_id", (req, res) => {
 
     const update = req.body
 
+    //Checks if customer ID, product ID, and order ID are valid
     Customer.findById(req.body.customerId, (error, customer) => {
         if (error) {
             return res.status(400).json( {customer: "This customer does not exist"} );
@@ -85,7 +91,6 @@ router.patch("/updateOrder/:order_id", (req, res) => {
                 if (error) {
                     return res.status(400).json( {product: "This product does not exist"} );
                 } else {
-                    
                     Order.findByIdAndUpdate(req.params.order_id, update, { new: true }, function(error, updatedOrder) {
                         if (error) {
                             return res.status(400).json(error);
@@ -93,21 +98,24 @@ router.patch("/updateOrder/:order_id", (req, res) => {
                             return res.json(updatedOrder);
                         }
                     });
-
-
-
                 }
             });
         }
     });
-    
-    // Order.findByIdAndUpdate(req.params.order_id, update, { new: true }, function(error, updatedOrder) {
-    //     if (error) {
-    //         return res.status(400).json(error);
-    //     } else {
-    //         return res.json(updatedOrder);
-    //     }
-    // });
 });
+
+//Deletes an order
+router.delete("/deleteOrder/:order_id", (req, res) => {
+    console.log(req, res)
+    Order.findByIdAndDelete(req.params.order_id, function(error, deletedOrder) {
+        if (error || deletedOrder === null) {
+            return res.status(400).json({ error: "This order does not exist" });
+        } else {
+            return res.json(deletedOrder);
+        }
+    });
+});
+
+
 
 module.exports = router;
