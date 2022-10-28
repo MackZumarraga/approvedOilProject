@@ -38,7 +38,8 @@ To test the application:
 - the frontend UI reflects and displays the records in the database
 - all CRUD functionality can be performed provided by the list of records, forms, and buttons
 
-![image](https://user-images.githubusercontent.com/86270564/198747099-70ff64ac-830c-4a29-9283-551de1523b9e.png)
+![image](https://user-images.githubusercontent.com/86270564/198750581-cf3d5b8f-0596-47c0-8972-8fadd880428b.png)
+
 
 
 ## Highlight
