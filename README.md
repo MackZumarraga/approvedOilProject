@@ -3,7 +3,10 @@
 ## Grocery Dashboard Overview
 This project is a full stack application that is designed to run a grocery business and maintain records digitally with full CRUD functionality. Grocery Dashboard features customers, products and the orders associating both elements. A user can create, read, update, and delete records with full validation to guide proper inputs and actions.  
 
-To test the application, type "npm install" to install dependencies and "npm run dev" to run both backend and frontend servers of the app locally.
+To test the application:
+1. Type `npm install` to install backend dependencies
+2. Type `npm run frontend-install` to install frontend dependencies
+3. Type `npm run dev` to run both backend and frontend servers of the app locally
 
 ## Technologies
 #### Backend
