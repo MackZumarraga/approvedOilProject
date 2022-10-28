@@ -1,0 +1,21 @@
+.customer-form {
+    margin-top: 31px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    row-gap: 5px;
+}
+
+.customer-form label {
+    display: flex;
+    flex-direction: column;
+}
+
+.customer-form label input {
+    max-width: 50%;
+}
+
+.defocus {
+    visibility: hidden;
+}

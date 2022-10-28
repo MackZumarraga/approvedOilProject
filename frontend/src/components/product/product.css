@@ -1,0 +1,40 @@
+.data {
+    overflow: auto;
+}
+
+
+.product-form {
+    margin-top: 31px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    row-gap: 5px;
+}
+
+.product-form label {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-form label input {
+    max-width: 50%;
+}
+
+.product-form label select {
+    max-width: 50%;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.button-container button {
+    margin: 20px 0px 10px 0px;
+    width: 50%;
+}
+
+.defocus {
+    visibility: hidden;
+}
